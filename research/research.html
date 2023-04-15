@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.321">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>OpenAI API research</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="research_files/libs/clipboard/clipboard.min.js"></script>
+<script src="research_files/libs/quarto-html/quarto.js"></script>
+<script src="research_files/libs/quarto-html/popper.min.js"></script>
+<script src="research_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="research_files/libs/quarto-html/anchor.min.js"></script>
+<link href="research_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="research_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="research_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="research_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="research_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">OpenAI API research</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="方針" class="level1">
+<h1>方針</h1>
+<p>　プロダクトを作りながら学ぶ <br> <br></p>
+</section>
+<section id="計画" class="level1">
+<h1>計画</h1>
+<ol type="1">
+<li>アイデア出し</li>
+<li>実装 <br> <br></li>
+</ol>
+</section>
+<section id="アイデア出し" class="level1">
+<h1>1. アイデア出し</h1>
+<section id="ブレーンストーミングの実施" class="level2">
+<h2 class="anchored" data-anchor-id="ブレーンストーミングの実施">ブレーンストーミングの実施</h2>
+<section id="事例調査" class="level3">
+<h3 class="anchored" data-anchor-id="事例調査">事例調査</h3>
+<ul>
+<li><a href="https://github.com/openai/openai-cookbook">OpenAI Cookbook</a>
+<ul>
+<li><a href="https://platform.openai.com/docs/introduction">OpenAI Documentation</a></li>
+</ul></li>
+<li><strong>ChatGPT Plugins</strong>
+<ul>
+<li><a href="https://openai.com/blog/chatgpt-plugins">ChatGPT plugins</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="chatgptgpt-4を用いた案出し" class="level3">
+<h3 class="anchored" data-anchor-id="chatgptgpt-4を用いた案出し">ChatGPT(GPT-4)を用いた案出し</h3>
+<ul>
+<li><p><strong>インターネット上で得やすいデータは何ですか？</strong></p>
+<p>インターネット上で得やすいデータは多岐にわたりますが、以下のようなものが特に一般的です。</p>
+<ul>
+<li><p>情報検索: ウェブ検索エンジン（Google、Bing、Yahoo!など）を利用して、さまざまなトピックに関する情報を簡単に得ることができます。</p></li>
+<li><p>ソーシャルメディア: Twitter、Facebook、Instagram、LinkedInなどのソーシャルメディアプラットフォームで、人々の意見や趣味、興味、活動を調べることができます。</p></li>
+<li><p>ニュース記事: ニュースウェブサイトやオンラインメディアで、最新の出来事やトレンドに関する情報を得ることができます。</p></li>
+<li><p>ブログやフォーラム: さまざまな専門分野のブログやフォーラムで、その分野に精通した人々からの意見や情報を得ることができます。</p></li>
+<li><p>ウィキペディア: ウィキペディアや他のオンライン百科事典を利用して、多くのトピックに関する概要や背景情報を得ることができます。</p></li>
+<li><p>データベース: 各種データベース（政府統計、経済データ、科学データなど）を利用して、特定の分野に関する詳細なデータを取得することができます。</p></li>
+<li><p>教育資料: オンライン学習プラットフォーム（Coursera、edX、Khan Academyなど）やオープン教育リソースを利用して、様々な学問分野の知識を得ることができます。</p></li>
+<li><p>動画コンテンツ: YouTubeやVimeoなどの動画共有サイトで、教育、エンターテイメント、技術デモなどの動画コンテンツを視聴することができます。</p></li>
+<li><p>オープンソースソフトウェア: GitHubやGitLabなどのプラットフォームで、オープンソースのソフトウェアやプロジェクトを調べたり、自分で開発に参加することができます。</p></li>
+<li><p>オンラインマーケットプレイス: Amazon、eBay、楽天などのオンラインショップで、商品情報や価格、レビューなどを調べることができます。</p></li>
+</ul></li>
+<li><p><strong>OpenAIのAPIを使用して何ができますか？</strong></p>
+<p>OpenAIのAPIを使用することで、多くのタスクを実行できます。APIは、OpenAIが開発した人工知能（AI）モデルを活用し、様々な用途に対応しています。以下に、OpenAIのAPIを使用して実現できるいくつかの一般的なタスクを示します。</p>
+<ul>
+<li><p>自然言語処理（NLP）: テキストデータの分析、生成、理解を行うために使用できます。例えば、文章の要約、質問応答、翻訳、感情分析などが可能です。</p></li>
+<li><p>会話エージェント: チャットボットや顧客サポートエージェントなど、ユーザーと自然な会話を行うエージェントを開発することができます。</p></li>
+<li><p>コンテンツ生成: ブログ記事、ニュース記事、ソーシャルメディア投稿、広告コピーなど、さまざまなタイプのテキストコンテンツを生成することができます。</p></li>
+<li><p>データ抽出: テキストデータから情報や知識を抽出し、データベースやスプレッドシートに整理することができます。</p></li>
+<li><p>コード生成: プログラミング言語を使用して、特定のタスクを実行するコードを生成することができます。</p></li>
+<li><p>教育およびトレーニング: 教育資料の作成や、質問に答えることで学習者を支援することができます。</p></li>
+<li><p>ゲーム開発: ゲームのストーリーラインやキャラクターの生成、会話のシナリオ作成など、ゲーム開発に役立つコンテンツを生成することができます。</p></li>
+<li><p>レコメンデーションシステム: ユーザーの好みや行動に基づいて、商品やコンテンツのレコメンデーションを提供することができます。</p></li>
+<li><p>画像認識や生成: 画像データを認識、分類、生成するタスクにもOpenAIのAPIを使用することができます。ただし、これらのタスクは主にOpenAIの画像認識・生成モデルに依存します。</p></li>
+<li><p>テキスト分類: テキストデータをカテゴリーやタグに分類することができます。これにより、コンテンツ管理や情報整理が容易になります。</p></li>
+<li><p>要約と抽象化: 大量のテキストデータから要点を抽出し、簡潔な要約を生成することができます。これは、ニュース記事やレポートの要約に役立ちます。</p></li>
+<li><p>クリエイティブライティング: 小説、詩、劇本などのクリエイティブなテキストコンテンツを生成することができます。</p></li>
+<li><p>パーソナルアシスタント: スケジュール管理、リマインダー設定、タスクリスト作成など、個人の日常タスクを支援するパーソナルアシスタントを開発することができます。</p></li>
+<li><p>自動キュレーション: ウェブサイトやブログのコンテンツを自動的にキュレーションし、関連性の高い情報を提供することができます。</p></li>
+<li><p>スピーチ認識と生成: 音声データをテキストに変換したり、テキストデータを音声に変換することができます。これにより、音声アシスタントやテキスト読み上げシステムを開発できます。</p></li>
+<li><p>センチメント分析: テキストデータから感情や意見を識別し、ポジティブ、ネガティブ、ニュートラルなどのセンチメントスコアを割り当てることができます。</p></li>
+<li><p>テキスト校正: 文法、スペル、句読点などの誤りを検出し、修正案を提案することができます。</p></li>
+<li><p>自動タグ付け: テキストや画像データに適切なタグを自動的に割り当てることができます。</p></li>
+<li><p>イベント検出: ニュース記事やソーシャルメディア投稿から重要なイベントを検出し、それらを関連するカテゴリに分類することができます。</p></li>
+<li><p>これらの例は、OpenAIのAPIが提供する機能の一部です。APIは非常に柔軟であり、開発者は独自のアプリケーションやサービスに応じてカスタ</p></li>
+<li><p>機械学習データの前処理: データセット内のテキストデータをクリーニングや整形することができます。これにより、機械学習モデルの学習効果を向上させることができます。</p></li>
+<li><p>フェイクニュース検出: ニュース記事やソーシャルメディア投稿の信憑性を評価し、フェイクニュースや誤情報を検出することができます。</p></li>
+<li><p>自動スクリプト生成: 映画、テレビ番組、広告などの映像コンテンツのスクリプトを自動的に生成することができます。</p></li>
+<li><p>オンラインモデレーション: オンラインコミュニティやフォーラムでの不適切なコンテンツやユーザー行動を検出し、適切な対処を行うことができます。</p></li>
+<li><p>バーチャルリアリティ（VR）や拡張現実（AR）: VRやARコンテンツの開発において、インタラクティブな会話やシナリオを生成することができます。</p></li>
+<li><p>メタデータ生成: データセットやコンテンツに関連するメタデータを自動的に生成し、検索や分析の効率を向上させることができます。</p></li>
+<li><p>顧客インサイト分析: 顧客フィードバックやレビューからインサイトを抽出し、ビジネス戦略や製品開発に役立てることができます。</p></li>
+<li><p>アイデア生成: 新しいアイデアやコンセプトを生成することができます。これは、プロダクトデザインやマーケティング戦略のブレインストーミングに役立ちます。</p></li>
+<li><p>レシピ生成: 食材や料理の好みに基づいて、オリジナルのレシピを生成することができます。</p></li>
+<li><p>メールフィルタリング: 受信メールを自動的に分類し、重要なメールやスパムメールを判別することができます。</p></li>
+<li><p>オンラインディベート: 複数の立場や視点を代表するAIエージェントを用いて、オンラインディベートを開催することができます。</p></li>
+<li><p>複数言語対応: 複数の言語を理解し、翻訳することができます。これにより、国際的なコミュニケーションやビジネス展開が容易になります。</p></li>
+<li><p>アクセシビリティ向上: 視覚障がい者や聴覚障がい者向けのコンテンツを生成し、アクセシビリティを向上させることができます。例えば、テキストの読み上げや、音声コンテンツの文字起こしなどが可能です。</p></li>
+<li><p>リスク評価: 企業や個人に関する情報を分析し、信用リスクや投資リスクを評価することができます。</p></li>
+<li><p>知的財産管理: 特許、著作権、商標などの知的財産情報を調査し、管理することができます。</p></li>
+</ul>
+<p>これらの例は、OpenAIのAPIが提供する機能や応用範囲を示していますが、APIの柔軟性とカスタマイズ性により、さまざまな業界や分野で活用できます。開発者は独自のアイデアや目的に応じて、APIを組み込んで新しいソリューションを開発できます。その結果、人工知能が日常生活やビジネスでさらに重要な役割を果たすことになるでしょう。</p></li>
+<li><p><strong>まだ誰も気づいていないけれどOpenAIのAPIを使うことで解決できる大きな課題は何ですか？</strong></p>
+<p>OpenAIのAPIは非常に柔軟性が高く、さまざまな業界や分野で活用されていますが、まだ十分に活用されていない分野や課題も存在します。以下に、OpenAIのAPIを使用して解決できる可能性のある大きな課題をいくつか示します。</p>
+<ul>
+<li><p>メンタルヘルスケア: OpenAIのAPIを使用して、精神的な悩みや問題に対処するためのサポートツールやカウンセリングボットを開発することができます。これにより、精神的な支援を必要とする人々に手軽にアクセスできるサービスを提供できます。</p></li>
+<li><p>災害対策と緊急対応: OpenAIのAPIを活用して、災害発生時の情報収集や緊急対応の効率化を図ることができます。例えば、災害情報をリアルタイムで収集・分析し、適切な対応策を提案するシステムを開発することができます。</p></li>
+<li><p>環境保護と持続可能性: 環境問題や持続可能性に関するデータを分析し、問題解決に役立つインサイトを得ることができます。また、持続可能な製品やサービスの開発に関するアイデアを生成することも可能です。</p></li>
+<li><p>貧困削減と社会的格差の縮小: OpenAIのAPIを利用して、貧困や社会的格差に関する情報を収集・分析し、効果的な対策や政策を提案することができます。</p></li>
+<li><p>言語・文化遺産の保存: 絶滅危機に瀕している言語や文化を研究・保存するために、OpenAIのAPIを活用することができます。例えば、希少な言語の翻訳や文化資料のデジタル化に取り組むことができます。</p></li>
+<li><p>医療と健康管理: OpenAIのAPIを使用して、医療データの分析や病気の診断支援、健康管理アプリケーションの開発を行うことができます。これにより、医療現場の効率化や個人の健康管理の向上が期待できます。</p></li>
+<li><p>エネルギー効率の向上: OpenAIのAPIを活用して、エネルギー消費データを分析し、エネルギー効率の改善策を提案することができます。これは、省エネルギー技術の開発や持続可能なエネルギー政策の策定に役立ちます。</p></li>
+<li><p>サイバーセキュリティ: OpenAIのAPIを用いて、セキュリティ脅威やサイバー攻撃の検出・予防を行うシステムを開発することができます。これにより、個人や企業のデータ保護が向上し、サイバーセキュリティのリスクが軽減されます。</p></li>
+<li><p>教育改革: 教育に関するデータを分析し、教育の質やアクセス性を向上させるための改善策を提案することができます。また、個別の学習ニーズに対応したカスタマイズされた教材や教育プログラムを開発することも可能です。</p></li>
+<li><p>都市計画とインフラ整備: OpenAIのAPIを活用して、都市計画やインフラ整備の効率化を図ることができます。例えば、交通データを分析し、交通渋滞の解消策を提案したり、都市計画の最適化を行うことができます。</p></li>
+</ul>
+<p>これらの課題は、OpenAIのAPIを適切に活用すれば、社会的なインパクトを生み出す可能性があります。APIの技術進歩や開発者コミュニティの拡大に伴い、さらに多くの分野でAPIの活用が進むことが期待されます。このような取り組みが積み重なることで、未来の課題や困難にも対処できるようになるでしょう。</p></li>
+<li><p><strong>OpenAIのAPIを使用して工場のFAシステムのトラブル対応記録を活用する案として何がありますか？</strong></p>
+<p>工場のFA（Factory Automation）システムのトラブル対応記録をOpenAIのAPIを使って活用する方法はいくつかあります。以下に、いくつかの案を示します。</p>
+<ul>
+<li><p>トラブル解決ナレッジベースの構築: 過去のトラブル対応記録を分析し、トラブル解決のためのナレッジベースを作成します。APIを使用して、自動的に適切な解決策を見つけ出すことができます。</p></li>
+<li><p>トラブル発生時の自動通知: APIを使ってリアルタイムでトラブル情報を監視し、関連するトラブルが検出された場合に、関係者に自動的に通知するシステムを構築します。</p></li>
+<li><p>トラブル分析と予防: 過去のトラブル対応記録を分析し、類似のトラブルが発生する可能性を予測します。その結果を元に、予防策を実施することができます。</p></li>
+<li><p>トラブルシューティングガイドの生成: OpenAIのAPIを使って、トラブル対応記録からトラブルシューティングガイドを自動的に生成します。これにより、新たなトラブル発生時に素早く対処できるようになります。</p></li>
+<li><p>教育・トレーニング資料の作成: トラブル対応記録をもとに、工場スタッフの教育やトレーニングのための資料を生成します。これにより、トラブルへの対応力を向上させることができます。</p></li>
+<li><p>トラブル対応記録のテキストマイニング: OpenAIのAPIを利用して、トラブル対応記録内の隠れたパターンや関連性を発見します。これにより、新たなインサイトや改善点を見つけ出すことができます。</p></li>
+</ul>
+<p>これらの案を実現することで、工場のFAシステムのトラブル対応が効率化され、生産性向上やダウンタイムの削減につながります。また、工場スタッフの負担軽減や知識共有の促進にも貢献するでしょう。</p></li>
+<li><p><strong>会社の機密情報のため工場のFAシステムのトラブル対応記録は家に持って帰ることができません。しかし、個人で入手可能な情報を用いてプライベートで似たような案を実現することで、AIやOpenAIのAPIの勉強をしたいと考えています。どのような案がありますか？</strong></p>
+<p>個人で入手可能な情報を用いて、AIやOpenAIのAPIを学ぶことができるプロジェクトの案をいくつか提案します。これらの案は、プライベートで取り組むことができ、実践的なスキルを身につけるのに役立ちます。</p>
+<ul>
+<li><p>機械学習やAIに関するオープンデータセットの利用: オープンデータセットを使用して、AIやOpenAIのAPIを使ったデータ分析や予測モデルの構築を学びます。例えば、KaggleやUCI Machine Learning Repositoryなどのウェブサイトで、無料で利用できるデータセットが多数公開されています。</p></li>
+<li><p>チャットボットの開発: OpenAIのAPIを使用して、独自のチャットボットを開発します。例えば、特定のトピックに関する質問に答えるチャットボットや、日常会話ができるチャットボットを作成してみましょう。</p></li>
+<li><p>ウェブスクレイピング: ウェブサイトから情報を収集し、OpenAIのAPIを使用してデータを分析・整理するプロジェクトを行います。これにより、データ収集や前処理のスキルを習得できます。</p></li>
+<li><p>ブログ記事の生成: OpenAIのAPIを使って、自動的にブログ記事やニュース記事を生成するシステムを開発します。これにより、自然言語生成（NLG）技術に関する知識を深めることができます。</p></li>
+<li><p>画像認識アプリケーションの開発: OpenAIのAPIを使用して、画像認識を行うアプリケーションを開発します。例えば、写真の中のオブジェクトを識別するアプリや、画像からキャプションを生成するアプリを作成してみましょう。</p>
+<p>これらのプロジェクトは、個人で取り組むことができ、プライベートな環境でAIやOpenAIのAPIを学ぶのに適しています。また、オープンソースのリソースやチュートリアルを活用することで、さらに効果的に学習を進めることができます。</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="自分で案出し" class="level3">
+<h3 class="anchored" data-anchor-id="自分で案出し">自分で案出し</h3>
+<ul>
+<li><strong>フォートナイトAI MPC</strong>
+<ul>
+<li>フォートナイト上でMPCに記憶機能とAIを実装し、他のMPCやプレーヤーとの会話やオブジェクトとのインタラクションを行うことで、MPCが自分で計画を立て実行するようにする。</li>
+</ul></li>
+<li><strong>AI会話日記</strong>
+<ul>
+<li>会話の内容をAIが理解し、日記を付ける。</li>
+<li>目標を定めておく事で、AIが目標達成のためのサポートをしてくれる。
+<ul>
+<li>例えばダイエットをしたい場合に会話の中で励ましてくれたり、ダイエットプランを立ててくれたりする。</li>
+<li>体重を会話の中で記録してくれたり、体重の変化をグラフで表示してくれたりする。</li>
+</ul></li>
+<li>過去の会話を記録しておくことができ、その文脈を元に会話してくれる。</li>
+</ul></li>
+<li><strong>投資アドバイスAI</strong>
+<ul>
+<li>各社の財務諸表と株価、各種の統計情報やニュースを元に投資のアドバイスをしてくれる。</li>
+</ul></li>
+<li><strong>機械学習チャットボット</strong>
+<ul>
+<li>Hugging Face, PyTorch, Arxiv, Kaggle, UCI Machine Learning Repository, OpenAI API documentなどのオープンデータセットを利用して、機械学習チャットボットを作成する。</li>
+</ul></li>
+<li><strong>AIディベート</strong>
+<ul>
+<li>テーマを与えることで2つのAIがディベートを行い、その結果を表示する。</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="実装するアイデア" class="level2">
+<h2 class="anchored" data-anchor-id="実装するアイデア">実装するアイデア</h2>
+<ul>
+<li><strong>アイデア</strong>
+<ul>
+<li>AIディベート
+<ul>
+<li>テーマを与えることで2つのAIがディベートを行い、その結果を表示する。</li>
+</ul></li>
+</ul></li>
+<li><strong>選択理由</strong>
+<ul>
+<li>他のアイデアと比べて、実装が比較的簡単であるため。</li>
+<li>応用性が高く、様々な分野で利用できるため。 <br> <br></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="実装" class="level1">
+<h1>2. 実装</h1>
+<section id="アイデアの詳細" class="level2">
+<h2 class="anchored" data-anchor-id="アイデアの詳細">アイデアの詳細</h2>
+<ul>
+<li>ディベートAIは、ディベートのテーマを受け取り、そのテーマに関する論点を抽出する。</li>
+<li>抽出した論点に対して、ディベートAIはそれぞれの論点に対する立場を決定する。</li>
+<li>ディベートAIは、論点と立場を元に、ディベートを行う。</li>
+<li>ディベートAIは、ディベートの結果を表示する。</li>
+</ul>
+</section>
+<section id="論点の抽出" class="level2">
+<h2 class="anchored" data-anchor-id="論点の抽出">論点の抽出</h2>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> dotenv <span class="im">import</span> load_dotenv</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> openai</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ログ設定</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    filename<span class="op">=</span><span class="st">"app.log"</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    filemode<span class="op">=</span><span class="st">"a"</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"</span><span class="sc">%(asctime)s</span><span class="st"> - </span><span class="sc">%(levelname)s</span><span class="st"> - </span><span class="sc">%(message)s</span><span class="st">"</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    level<span class="op">=</span>logging.INFO)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ファイルの絶対パスを取得</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>current_directory <span class="op">=</span> os.path.abspath(os.getcwd())</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># .envファイルのパスを指定して読み込む</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>dotenv_path <span class="op">=</span> os.path.join(current_directory, <span class="st">'.env'</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>load_dotenv(dotenv_path)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 環境変数からAPIキーを取得</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>api_key <span class="op">=</span> os.environ.get(<span class="st">"OPENAI_API_KEY"</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> api_key:</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"OPENAI_API_KEY not found in environment variables"</span>)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># OpenAI APIクライアントの設定</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>openai.api_key <span class="op">=</span> api_key</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># プロンプトを指定</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>prompt <span class="op">=</span> <span class="st">"Please explain the process of photosynthesis."</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># prompt = "光合成を説明してください。"</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"># openai.Completion.createの引数を変数に格納</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>engine <span class="op">=</span> <span class="st">"babbage"</span> <span class="co"># ada, babbage, curie, or davinci</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>max_tokens <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>stop <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>temperature <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co"># APIリクエストの設定</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> openai.Completion.create(</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    engine<span class="op">=</span>engine,</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    prompt<span class="op">=</span>prompt,</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    max_tokens<span class="op">=</span>max_tokens,</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    n<span class="op">=</span>n,</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    stop<span class="op">=</span>stop,</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    temperature<span class="op">=</span>temperature,</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co"># 返答の取得</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>answer <span class="op">=</span> response.choices[<span class="dv">0</span>].text.strip()</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 返答のログ記録</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="st">"-----"</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="ss">f"Engine: </span><span class="sc">{</span>engine<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="ss">f"Prompt: </span><span class="sc">{</span>prompt<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="ss">f"Answer: </span><span class="sc">{</span>answer<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="st">"-----"</span>)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Engine:"</span>, engine)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Prompt:"</span>, prompt)</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Answer:"</span>, answer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Engine: babbage
+Prompt: Please explain the process of photosynthesis.
+Answer: How is the energy produced? What are the reactions</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
